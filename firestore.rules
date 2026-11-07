@@ -1,0 +1,64 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // E-mails que podem editar o cardápio. Para trocar, edite aqui e publique as regras.
+    function emailsAdmin() {
+      return ['teste@jtech.teste'];
+    }
+
+    function isMenuAdmin() {
+      return request.auth != null
+        && request.auth.token.email in emailsAdmin();
+    }
+
+    function validMenuItem(data) {
+      return data.keys().hasOnly([
+          "category",
+          "name",
+          "price",
+          "mediumPrice",
+          "largePrice",
+          "sortOrder"
+        ])
+        && data.keys().hasAll([
+          "category",
+          "name",
+          "price",
+          "mediumPrice",
+          "largePrice",
+          "sortOrder"
+        ])
+        && data.name is string
+        && data.name.size() > 0
+        && data.sortOrder is int
+        && data.sortOrder >= 0
+        && (
+          (
+            data.category == "skewer"
+            && data.price is number
+            && data.price > 0
+            && data.mediumPrice == null
+            && data.largePrice == null
+          )
+          || (
+            data.category == "side"
+            && data.price == null
+            && data.mediumPrice is number
+            && data.mediumPrice > 0
+            && (
+              data.largePrice == null
+              || (data.largePrice is number && data.largePrice > 0)
+            )
+          )
+        );
+    }
+
+    // Cardápio: qualquer pessoa lê; só o admin cria, altera e exclui itens válidos.
+    match /menu_items/{itemId} {
+      allow read: if true;
+      allow create, update: if isMenuAdmin() && validMenuItem(request.resource.data);
+      allow delete: if isMenuAdmin();
+    }
+  }
+}

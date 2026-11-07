@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#191511">
+    <meta name="description" content="Confira o cardápio da Jtech Espetaria: espetos e guarnições.">
+    <title>Cardápio | Jtech Espetaria</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="public-page">
+        <header class="hero page">
+          <div class="brand-mark" aria-hidden="true">🔥</div>
+          <p class="eyebrow">Cardápio</p>
+          <h1><span class="brand-red">Jtech</span> <span class="brand-white">Espetaria</span></h1>
+          <p class="intro">Escolha seus favoritos e aproveite. Feito na brasa, do nosso jeito.</p>
+        </header>
+
+        <nav class="menu-nav page" aria-label="Navegar pelo cardápio">
+          <a href="#espetos">Espetos</a>
+          <a href="#guarnicoes">Guarnições</a>
+        </nav>
+
+        <main class="page">
+          <div id="menu-error" hidden></div>
+          <div id="firebase-notice" hidden></div>
+
+          <section class="menu-section" id="espetos" aria-labelledby="espetos-title">
+            <div class="section-heading">
+              <h2 id="espetos-title">Espetos</h2>
+              <p class="section-note">Preço por unidade</p>
+            </div>
+            <div class="menu-list" id="skewer-list"></div>
+          </section>
+
+          <section class="menu-section" id="guarnicoes" aria-labelledby="guarnicoes-title">
+            <div class="section-heading">
+              <h2 id="guarnicoes-title">Guarnições</h2>
+              <p class="section-note">Escolha o tamanho</p>
+            </div>
+            <div class="legend" aria-hidden="true">
+              <span>M = Médio</span>
+              <span>G = Grande</span>
+            </div>
+            <div class="menu-list" id="side-list"></div>
+          </section>
+        </main>
+
+        <div class="order-action page">
+          <a class="whatsapp-button" href="https://wa.me/55739999999?text=Ol%C3%A1%2C%20vim%20pelo%20card%C3%A1pio%20da%20Jtech%20Espetaria%20e%20gostaria%20de%20fazer%20um%20pedido." target="_blank" rel="noopener noreferrer">
+            <img src="assets/whatsapp.svg" alt="" width="18" height="18">
+            Pedir pelo WhatsApp
+          </a>
+        </div>
+
+        <footer class="footer page">
+          <strong>Jtech Espetaria</strong><br>
+          Cardápio digital<br>
+          <a href="#admin">Área do administrador</a>
+        </footer>
+      </div>
+
+      <main class="admin-page page" id="admin-page" hidden>
+        <a class="back-link" href="#">← Voltar ao cardápio</a>
+        <h1>Área do cliente</h1>
+
+        <p class="notice error-notice" id="firebase-not-configured" hidden>
+          O painel ainda não está conectado ao Firebase. Preencha o arquivo firebase-config.js e publique as regras do Firestore para ativar o login e salvar alterações.
+        </p>
+
+        <p id="auth-loading" hidden>Carregando painel...</p>
+
+        <form class="login-form" id="login-form" hidden>
+          <p class="intro admin-intro">Entre para editar produtos e preços do cardápio.</p>
+          <label>
+            E-mail
+            <input name="email" type="email" autocomplete="username" required>
+          </label>
+          <label>
+            Senha
+            <input name="password" type="password" autocomplete="current-password" required>
+          </label>
+          <div id="login-error" hidden></div>
+          <button class="admin-save" type="submit">Entrar</button>
+        </form>
+
+        <section id="admin-editor" hidden>
+          <div class="admin-heading">
+            <div>
+              <a class="back-link" href="#">← Ver cardápio</a>
+              <h1>Editar cardápio</h1>
+            </div>
+            <button class="admin-secondary" type="button" data-action="sign-out">Sair</button>
+          </div>
+
+          <p class="admin-help">Altere nomes e preços, adicione novos itens ou remova opções que saíram do cardápio.</p>
+          <div id="admin-error" hidden></div>
+          <div id="admin-message" hidden></div>
+          <p id="items-loading" hidden>Carregando itens...</p>
+
+          <div id="admin-sections">
+            <section class="admin-section">
+              <div class="admin-section-heading">
+                <h2>Espetos</h2>
+                <button class="admin-secondary" type="button" data-add-category="skewer">+ Adicionar</button>
+              </div>
+              <div id="skewer-editor-list"></div>
+            </section>
+
+            <section class="admin-section">
+              <div class="admin-section-heading">
+                <h2>Guarnições</h2>
+                <button class="admin-secondary" type="button" data-add-category="side">+ Adicionar</button>
+              </div>
+              <div id="side-editor-list"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="admin-item-template">
+      <form class="admin-item">
+        <label>
+          Nome
+          <input name="name" required>
+        </label>
+        <label class="skewer-price-field">
+          Preço (R$)
+          <input name="price" inputmode="decimal" placeholder="9,00" required>
+        </label>
+        <label class="side-price-field">
+          Médio (R$)
+          <input name="mediumPrice" inputmode="decimal" placeholder="7,00" required>
+        </label>
+        <label class="side-price-field">
+          Grande (R$)
+          <input name="largePrice" inputmode="decimal" placeholder="Opcional">
+        </label>
+        <div class="admin-item-actions">
+          <button class="admin-save" type="submit">Salvar</button>
+          <button class="admin-delete" type="button" data-delete-id>Excluir</button>
+        </div>
+      </form>
+    </template>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
